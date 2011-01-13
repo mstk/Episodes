@@ -35,10 +35,7 @@ class Episode_Manager
     when :year
       day = curr_day - (curr_day.yday - 1)
     when :quarter
-      proper_day = curr_day
-      until (proper_day.month-1) % 3 == 0
-        proper_day = proper_day.prev_month
-      end
+      proper_day = curr_day.prev_month((curr_day.month-1) % 3)
       day = proper_day - (proper_day.mday - 1)
     when :month
       day = curr_day - (curr_day.mday - 1)
