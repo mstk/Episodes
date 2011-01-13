@@ -2,7 +2,7 @@ require 'date'
 
 # Jobs
 #
-# - Figure out last elapsed episode of its type
+# - Figure out last elapsed episode of its type X
 # - Search for past episodes of its type
 # - Aggregate data
 # - Create and store new episodes of its type
@@ -30,17 +30,40 @@ class Episode_Manager
     @type = type
   end
   
-  def last_elapsed
-    today = Date.today
-    day = case @type
-    when :year    then Date.parse("#{today.year-1}-01-01")
-    when :quarter then today.month < 4 ? Date.parse("#{today.year-1}-10-01") : today.month < 7 ? Date.parse("#{today.year}-01-01") : today.month < 10 ? Date.parse("#{today.year}-04-01") : Date.parse("#{today.year}-10-01")
-    when :month   then Date.parse("#{today.prev_month.year}-#{today.prev_month.month}-#{01}")
-    when :week    then today-(today.wday)
-    when :day     then today.prev_day
+  def current(curr_day = Date.today)
+    case @type
+    when :year
+      day = curr_day - (curr_day.yday - 1)
+    when :quarter
+      proper_day = curr_day
+      until (proper_day.month-1) % 3 == 0
+        proper_day = proper_day.prev_month
+      end
+      day = proper_day - (proper_day.mday - 1)
+    when :month
+      day = curr_day - (curr_day.mday - 1)
+    when :week
+      day = curr_day - (curr_day.wday)
+    when :day
+      day = curr_day
     end
     
     fetch_episode(day)
+  end
+  
+  def last_elapsed(from_day = Date.today)
+    case @type
+    when :year
+      return current(from_day.prev_year)
+    when :quarter
+      return current(from_day.prev_month(3))
+    when :month
+      return current(from_day.prev_month)
+    when :week
+      return current(from_day - 7)
+    when :day
+      return current(from_day.prev_day)
+    end
   end
   
   def fetch_episode(start_date)
