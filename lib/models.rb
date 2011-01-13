@@ -12,18 +12,3 @@ class Episode
   
   
 end
-
-# class YearEpisode    < Episode
-# end
-
-# class QuarterEpisode < Episode
-# end
-
-# class MonthEpisode   < Episode
-# end
-
-# class WeekEpisode    < Episode
-# end
-
-# class DayEpisode     < Episode
-# end
