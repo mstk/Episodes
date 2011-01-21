@@ -28,5 +28,5 @@ namespace :db do
 end
 
 task :environment do
-  require 'environment'
+  require "#{File.dirname(__FILE__)}/environment"
 end

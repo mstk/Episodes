@@ -6,9 +6,12 @@ require 'date'
 # - Search for past episodes of its type
 # - Aggregate data
 # - Create and store new episodes of its type
+# - Determine if episodes are "open" for creation.
 #
 #
 class Episode_Manager
+  
+  attr_reader :type
   
   private_class_method :new
   
@@ -26,7 +29,7 @@ class Episode_Manager
     @@EM_INDEX[type]
   end
   
-  def intialize(type)
+  def initialize(type)
     @type = type
   end
   
@@ -64,7 +67,13 @@ class Episode_Manager
   end
   
   def fetch_episode(start_date)
-    Episode.get( :type => @type.to_s, :date => start_date )
+    all_matching = Episode.all(:type => @type.to_s, :date => start_date)
+    return all_matching[0] if all_matching[0]
+    return Episode.create(:type => @type.to_s, :date => start_date)
+  end
+  
+  def is_open(date)
+    return current(date) <= last_elapsed
   end
   
 end
