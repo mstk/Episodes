@@ -7,14 +7,18 @@ class Episode
   property :body,       Text,     :default  => ''
   property :word_count, Integer
   property :created_at, DateTime
-  property :scores,     Yaml,     :default => lambda { Hash.new(0) }
-  property :meta,       Yaml,     :default => lambda { Hash.new(0) }
+  # property :scores,     Yaml,     :default => lambda { Hash.new(0) }
+  # property :meta,       Yaml,     :default => lambda { Hash.new(0) }
   
   before :save do
+    @word_count = count_words
+  end
+  
+  def count_words
     if @body
-      @word_count = @body.word_count
+      @body.word_count
     else
-      @word_count = 0
+      0
     end
   end
   

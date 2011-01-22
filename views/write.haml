@@ -1,0 +1,34 @@
+%script{:type => 'text/javascript', :src => 'script/write.js'}
+
+#toolbar
+  #zoom
+    %ul
+      %li Zoom in
+      %li Zoom out
+  #chooser
+    %ul
+      - %w{ Day Week Month Quarter Year }.each do |type|
+        %li
+          %a.type_switch= type
+      
+#work_space
+  #title
+    #type
+    #date
+      #start_date>
+      to
+      #end_date>
+  #entry
+    %form{:name => 'entry_form'}
+      %textarea#episode_body{:name => 'episode_body', :rows => 10, :cols => 75}
+      %br/
+      %input#date{:type => 'hidden', :name => 'date'}
+      %input#type{:type => 'hidden', :name => 'type'}
+      %a#save Save
+  #info
+    .info_box
+      .info_box_text Word Count
+      .info_box#word_count
+    .info_box
+      .info_box_text Last saved at
+      .info_box#last_saved

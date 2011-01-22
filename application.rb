@@ -31,7 +31,7 @@ post '/save' do
   type = params[:type]
   date = Date.parse(params[:date])
   
-  raise "Bad type" unless %{ day week month quarter year }.include? type
+  raise "Bad type" unless %w{ day week month quarter year }.include? type
   
   @episode = Episode_Manager.EM(type.intern).current(date)
   
@@ -40,11 +40,15 @@ end
 
 post '/load' do
   type = params[:type] || 'day'
-  date = params[:date] ? Date.parse(params[:date]) : Date.today.prev_day
+  date = params[:date] ? Date.parse(params[:date]) : Date.today
   
-  raise "Bad type" unless %{ day week month quarter year }.include? type
+  raise "Bad type" unless %w{ day week month quarter year }.include? type
   
-  @episode = Episode_Manager.EM(type.intern).current(date)
+  if params[:mode] == 'current'
+    @episode = Episode_Manager.EM(type.intern).current(date)
+  else
+    @episode = Episode_Manager.EM(type.intern).last_elapsed(date)
+  end
   
   raise "Bad episode criteria" unless @episode
   
