@@ -11,7 +11,31 @@ class Episode
   property :meta,       Yaml,     :default => lambda { Hash.new(0) }
   
   before :save do
-    word_count = body.word_count
+    if @body
+      @word_count = @body.word_count
+    else
+      @word_count = 0
+    end
+  end
+  
+  def to_json
+    to_hash.to_json
+  end
+  
+  def to_hash
+    { :id         => @id,
+      :date       => @date,
+      :end_date   => end_date,
+      :type       => @type,
+      :body       => @body || body || '',
+      :word_count => @word_count,
+      :created_at => @created_at,
+      :scores     => @scores,
+      :meta       => @meta }
+  end
+  
+  def end_date
+    Episode_Manager.EM(@type.intern).end_date(@date)
   end
   
 end

@@ -66,6 +66,22 @@ class Episode_Manager
     end
   end
   
+  def end_date(from_day = Date.today)
+    case @type
+    when :year
+      return (from_day - (from_day.yday - 1)).next_year.prev_day
+    when :quarter
+      proper_day = from_day.prev_month((from_day.month-1) % 3)
+      return (proper_day - (proper_day.mday - 1)).next_month(3).prev_day
+    when :month
+      return (from_day - (from_day.mday - 1)).next_month
+    when :week
+      return (from_day - (from_day.wday)).next_day(6)
+    when :day
+      return from_day
+    end
+  end
+  
   def fetch_episode(start_date)
     all_matching = Episode.all(:type => @type.to_s, :date => start_date)
     return all_matching[0] if all_matching[0]

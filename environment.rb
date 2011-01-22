@@ -7,6 +7,7 @@ require 'dm-migrations'
 require 'dm-types'
 require 'haml'
 require 'yaml'
+require 'json'
 require 'ostruct'
 
 require 'sinatra' unless defined?(Sinatra)
