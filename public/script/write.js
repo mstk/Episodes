@@ -13,7 +13,10 @@ $(document).ready(function(){
         $('#start_date').text(episode_json.date);
         $('#end_date').text(episode_json.end_date);
         
-        update_info_box();
+        $('#last_saved').text(episode_json.updated_at);
+        
+        changed = false;
+        update_count();
         
       });
     };
@@ -25,15 +28,11 @@ $(document).ready(function(){
         var type = $('input#type').val();
         
         $.post("save", {new_body: new_body, date: date, type: type}, function(success) {
-          update_info_box();
+          changed = false;
+          update_count();
+          update_time();
         });
       };
-    };
-    
-    update_info_box = function() {
-      changed = false;
-      update_count();
-      update_time();
     };
     
     update_count = function() {
@@ -99,6 +98,5 @@ $(document).ready(function(){
     load();
     
     update_count();
-    update_time();
     
   });

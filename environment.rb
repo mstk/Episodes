@@ -22,8 +22,8 @@ configure do
   # load models
   require "#{File.dirname(__FILE__)}/lib/models"
 
-  DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/db/episodes.sqlite3")
-  # DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{File.expand_path(File.dirname(__FILE__))}/#{Sinatra::Base.environment}.db"))
+  # DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/db/episodes.sqlite3")
+  DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3://#{Dir.pwd}/db/episodes.sqlite3"))
   
   DataMapper::Model.raise_on_save_failure = true
   

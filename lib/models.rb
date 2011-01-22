@@ -7,6 +7,7 @@ class Episode
   property :body,       Text,     :default  => ''
   property :word_count, Integer
   property :created_at, DateTime
+  property :updated_at, DateTime
   # property :scores,     Yaml,     :default => lambda { Hash.new(0) }
   # property :meta,       Yaml,     :default => lambda { Hash.new(0) }
   
@@ -34,6 +35,7 @@ class Episode
       :body       => @body || body || '',
       :word_count => @word_count,
       :created_at => @created_at,
+      :updated_at => @updated_at,
       :scores     => @scores,
       :meta       => @meta }
   end
