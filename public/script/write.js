@@ -1,5 +1,9 @@
 $(document).ready(function(){
     
+    var auto_save_interval = 30000;
+    
+    // --------------------------------------------
+    
     load = function(type,date,mode) {
       $.post("load", {type: type, date: date}, function(data) {
         
@@ -13,10 +17,15 @@ $(document).ready(function(){
         $('#start_date').text(episode_json.date);
         $('#end_date').text(episode_json.end_date);
         
-        $('#last_saved').text(episode_json.updated_at);
+        if (episode_json.updated_at == null) {
+          $('#last_saved').text('Never');
+        } else {
+          $('#last_saved').text(episode_json.updated_at.slice(11,19));
+        };
         
         changed = false;
         update_count();
+        update_background();
         
       });
     };
@@ -31,6 +40,7 @@ $(document).ready(function(){
           changed = false;
           update_count();
           update_time();
+          text_changes = 0;
         });
       };
     };
@@ -60,6 +70,11 @@ $(document).ready(function(){
       $('#last_saved').text(h + ':' + m + ':' + s);
     };
     
+    update_background = function() {
+      var type = $('input#type').val();
+      $('#container').removeClass('day_bg week_bg month_bg quarter_bg year_bg').addClass(type + '_bg');
+    };
+    
     // -----------------------------------------------------
     
     $('a#save').click(function(event) {
@@ -82,12 +97,15 @@ $(document).ready(function(){
         text_changes += 1;
         if (text_changes > 50) {
           save();
-          text_changes = 0;
         };
         
       });
       
     });
+    
+    var refreshId = setInterval(function() {
+      save();
+    }, auto_save_interval);
     
     // -----------------------------------------------------
     

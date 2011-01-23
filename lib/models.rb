@@ -2,22 +2,24 @@ class Episode
   include DataMapper::Resource
 
   property :id,         Serial
+  property :author,     String,   :default => 'Justin'
   property :date,       Date,     :required => true
   property :type,       String,   :required => true
   property :body,       Text,     :default  => ''
   property :word_count, Integer
   property :created_at, DateTime
   property :updated_at, DateTime
-  # property :scores,     Yaml,     :default => lambda { Hash.new(0) }
-  # property :meta,       Yaml,     :default => lambda { Hash.new(0) }
+  property :scores,     Yaml,     :default => proc { Hash.new(0) }
+  property :meta,       Yaml,     :default => proc { Hash.new(0) }
+  property :locked,     Boolean,  :default => false
   
   before :save do
-    @word_count = count_words
+    word_count = count_words
   end
   
   def count_words
-    if @body
-      @body.word_count
+    if body
+      body.word_count
     else
       0
     end
