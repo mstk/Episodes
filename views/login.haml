@@ -1,0 +1,11 @@
+#login_form
+  #error= @error
+  
+  %form{:name => 'login', :action => '/login', :method => 'post'}
+    #email_entry
+      Email or Username
+      %input#username{:name => 'username'}
+    #password_entry
+      Password
+      %input#password{:name => 'password', :type => 'password'}
+    %input#submit{:type => 'submit'}

@@ -1,7 +1,12 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'sinatra'
+require 'digest/sha1'
 require_relative 'environment'
+
+enable :sessions
+
+$salt = 'th1$ 1$ my $@1t'
 
 configure do
   set :views, "#{File.dirname(__FILE__)}/views"
@@ -14,7 +19,9 @@ error do
 end
 
 helpers do
-  # add your helpers here
+  def current_user
+    User.first(:email => session[:current_user])
+  end
 end
 
 # root page
@@ -23,6 +30,7 @@ get '/' do
 end
 
 get '/write' do
+  login_required
   haml :write
 end
 
@@ -53,4 +61,42 @@ post '/load' do
   raise "Bad episode criteria" unless @episode
   
   @episode.to_json
+end
+
+get '/login' do
+  haml :login
+end
+
+post '/login' do
+  if user = User.authenticate(params[:username], params[:password])
+    session[:user] = user.id
+    redirect_to_stored
+  else
+    redirect '/login'
+  end
+end
+
+get '/signup' do
+  haml :signup
+end
+
+post '/signup' do
+  @user = User.new(:email => params[:email], :username => params[:username], :password => params[:password])
+  if @user.save
+    session[:user] = @user.id
+    redirect '/login'
+  else
+    redirect '/signup'
+  end
+end
+
+get '/logout' do
+  session[:user] = nil
+  redirect '/login'
+end
+
+get '/api.json' do
+  login_required
+  content_type "text/json"
+  "{ 'a': 'b' }"
 end

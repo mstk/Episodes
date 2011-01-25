@@ -1,8 +1,27 @@
+class User
+  include DataMapper::Resource
+
+  property :id,         Serial
+  property :email,      String, :length => (5..40), :unique => true, :format => :email_address
+  property :username,   String, :length => (2..32), :unique => true
+  property :hashed_password, String
+  property :salt,       String
+  property :created_at, DateTime
+  property :access,     Integer, :default => 2
+  property :active,     Boolean, :default => true
+  
+  has n, :episodes
+  
+  # 0: admin
+  # 1: mod
+  # 2: user
+  
+end
+
 class Episode
   include DataMapper::Resource
 
   property :id,         Serial
-  property :author,     String,   :default => 'Justin'
   property :date,       Date,     :required => true
   property :type,       String,   :required => true
   property :body,       Text,     :default  => ''
@@ -13,37 +32,6 @@ class Episode
   property :meta,       Yaml,     :default => proc { Hash.new(0) }
   property :locked,     Boolean,  :default => false
   
-  before :save do
-    word_count = count_words
-  end
-  
-  def count_words
-    if body
-      body.word_count
-    else
-      0
-    end
-  end
-  
-  def to_json
-    to_hash.to_json
-  end
-  
-  def to_hash
-    { :id         => @id,
-      :date       => @date,
-      :end_date   => end_date,
-      :type       => @type,
-      :body       => @body || body || '',
-      :word_count => @word_count,
-      :created_at => @created_at,
-      :updated_at => @updated_at,
-      :scores     => @scores,
-      :meta       => @meta }
-  end
-  
-  def end_date
-    Episode_Manager.EM(@type.intern).end_date(@date)
-  end
+  belongs_to :user
   
 end

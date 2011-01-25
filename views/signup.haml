@@ -1,0 +1,13 @@
+#signup_form
+  %form{:name => 'signup', :action => '/signup', :method => 'post'}
+    #username_entry
+      Username
+      %input#username{:name => 'username'}
+    #email_entry
+      Email
+      %input#email{:name => 'email'}
+    #password_entry
+      Password
+      %input#password{:name => 'password', :type => 'password'}
+    %input#submit{:type => 'submit'}
+= User.all.inspect
