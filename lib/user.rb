@@ -1,21 +1,18 @@
 class User
-  # Authenticate a user based upon a (username or e-mail) and password
-  # Return the user record if successful, otherwise nil
-  def self.authenticate(username_or_email, pass)
-    current_user = first(:username => username_or_email) || first(:email => username_or_email)
-    return nil if current_user.nil? || User.encrypt(pass, current_user.salt) != current_user.hashed_password
-    current_user
-  end  
-
-  # Set the user's password, producing a salt if necessary
-  def password=(pass)
-    @password = pass
-    self.salt = (1..12).map{(rand(26)+65).chr}.join if !self.salt
-    self.hashed_password = User.encrypt(@password, self.salt)
+  
+  def most_recent_episode(type)
+    start_day = EpisodeRange.last_elapsed_start(type,Date.tday)
+    return get_episode(type,date)
   end
-
-  protected
-  def self.encrypt(pass, salt)
-    Digest::SHA1.hexdigest(pass + salt)
+  
+  def get_episode(type,date)
+    all_matching = episodes.all(:type => @type.to_s, :date => date)
+    return all_matching[0] if all_matching[0]
+    
+    blank_episode = Episode.new
+    blank_episode.attributes = { :user => self, :type => type.to_s, :date => date }
+    
+    return blank_episode
   end
+  
 end

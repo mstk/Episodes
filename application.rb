@@ -18,12 +18,6 @@ error do
   'Application error'
 end
 
-helpers do
-  def current_user
-    User.first(:email => session[:current_user])
-  end
-end
-
 # root page
 get '/' do
   haml :root
@@ -92,7 +86,7 @@ end
 
 get '/logout' do
   session[:user] = nil
-  redirect '/login'
+  redirect '/'
 end
 
 get '/api.json' do

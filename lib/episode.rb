@@ -29,7 +29,4 @@ class Episode
       :meta       => @meta }
   end
   
-  def end_date
-    Episode_Manager.EM(@type.intern).end_date(@date)
-  end
 end

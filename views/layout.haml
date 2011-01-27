@@ -10,7 +10,7 @@
         #logo
           %h1
             %a{:href => '/'}= SiteConfig.title
-        #username= current_user.inspect
+        #username= current_user.username
       #content= yield
       #footer
         %p#legal= "&mdash; &copy; #{Time.now.strftime('%Y')} #{SiteConfig.author} &mdash;"
