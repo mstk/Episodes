@@ -24,7 +24,7 @@ class Episode
   property :id,         Serial
   property :date,       Date,     :required => true
   property :type,       String,   :required => true
-  property :body,       Text,     :default  => ''
+  property :body,       Text,     :default  => 'blank body'
   property :word_count, Integer
   property :created_at, DateTime
   property :updated_at, DateTime

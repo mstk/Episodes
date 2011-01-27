@@ -15,7 +15,6 @@ $(document).ready(function(){
         
         $('#type').text(episode_json.type.replace(/^\w/, function($0) { return $0.toUpperCase(); }));
         $('#start_date').text(episode_json.date);
-        $('#end_date').text(episode_json.end_date);
         
         if (episode_json.updated_at == null) {
           $('#last_saved').text('Never');

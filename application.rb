@@ -35,7 +35,7 @@ post '/save' do
   
   raise "Bad type" unless %w{ day week month quarter year }.include? type
   
-  @episode = Episode_Manager.EM(type.intern).current(date)
+  @episode = current_user.episode_during_day(type.intern,date)
   
   @episode.update(:body => new_body)
 end
@@ -47,9 +47,9 @@ post '/load' do
   raise "Bad type" unless %w{ day week month quarter year }.include? type
   
   if params[:mode] == 'current'
-    @episode = Episode_Manager.EM(type.intern).current(date)
+    @episode = current_user.episode_during_day(type.intern,date)
   else
-    @episode = Episode_Manager.EM(type.intern).last_elapsed(date)
+    @episode = current_user.most_recent_episode(type.intern,date)
   end
   
   raise "Bad episode criteria" unless @episode
@@ -93,4 +93,8 @@ get '/api.json' do
   login_required
   content_type "text/json"
   "{ 'a': 'b' }"
+end
+
+get '/test' do
+  haml :test
 end

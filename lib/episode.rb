@@ -19,7 +19,6 @@ class Episode
   def to_hash
     { :id         => @id,
       :date       => @date,
-      :end_date   => end_date,
       :type       => @type,
       :body       => @body || body || '',
       :word_count => @word_count,
@@ -27,6 +26,26 @@ class Episode
       :updated_at => @updated_at,
       :scores     => @scores,
       :meta       => @meta }
+  end
+  
+  @@TYPES = [ :year, :quarter, :month, :week, :day ]
+  
+  def self.zoom_out_type(type)
+    type_id = @@TYPES.index(type)
+    if type_id == 0
+      return nil
+    else
+      return @@TYPES[type_id-1]
+    end
+  end
+  
+  def self.zoom_in_type(type)
+    type_id = @@TYPES.index(type)
+    if type_id == 4
+      return nil
+    else
+      return @@TYPES[type_id+1]
+    end
   end
   
 end

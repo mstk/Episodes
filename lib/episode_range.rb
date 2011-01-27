@@ -3,31 +3,31 @@ module EpisodeRange
   def self.episode_start(type,date)
     case type
     when :year
-      return curr_day - (curr_day.yday - 1)
+      return date - (date.yday - 1)
     when :quarter
-      proper_day = curr_day.prev_month((curr_day.month-1) % 3)
+      proper_day = date.prev_month((date.month-1) % 3)
       return proper_day - (proper_day.mday - 1)
     when :month
-      return curr_day - (curr_day.mday - 1)
+      return date - (date.mday - 1)
     when :week
-      return curr_day - (curr_day.wday)
+      return date - (date.wday)
     when :day
-      return curr_day
+      return date
     end
   end
   
   def self.last_elapsed_start(type,date)
-    case @type
+    case type
     when :year
-      return episode_start(from_day.prev_year)
+      return self.episode_start(type,date.prev_year)
     when :quarter
-      return episode_start(from_day.prev_month(3))
+      return self.episode_start(type,date.prev_month(3))
     when :month
-      return episode_start(from_day.prev_month)
+      return self.episode_start(type,date.prev_month)
     when :week
-      return episode_start(from_day - 7)
+      return self.episode_start(type,date - 7)
     when :day
-      return episode_start(from_day.prev_day)
+      return self.episode_start(type,date.prev_day)
     end
   end
   
